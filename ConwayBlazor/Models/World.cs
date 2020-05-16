@@ -55,12 +55,10 @@ namespace ConwayBlazor.Models
             });
         }
 
-        private int IsNeighborAlive(int gridIndex, int x, int y, int offsetX, int offsetY)
+        private int IsNeighborAlive(int gridIndex, int proposedOffsetX, int proposedOffsetY)
         {
-            int proposedOffsetX = x + offsetX;
-            int proposedOffsetY = y + offsetY;
-            bool outOfBounds = proposedOffsetX < 0 || proposedOffsetX >= _sizeX || 
-                               proposedOffsetY < 0 || proposedOffsetY >= _sizeY;
+            var outOfBounds = proposedOffsetX < 0 || proposedOffsetX >= _sizeX || 
+                                  proposedOffsetY < 0 || proposedOffsetY >= _sizeY;
             return (!outOfBounds)
                 ? _cells[gridIndex][proposedOffsetX, proposedOffsetY] ? 1 : 0
                 : 0;
@@ -71,19 +69,21 @@ namespace ConwayBlazor.Models
             var index = this.Generation & 1;
             var world = _cells[index];
             var nextGeneration = _cells[(1+this.Generation) & 1];
+
+            this.Population = 0;
          
             for (var y = 0; y != _sizeY; ++y)
             {
                 for (var x = 0; x != _sizeX; ++x)
                 {
-                    var aliveNeighbor = IsNeighborAlive(index, x, y, -1, 0)
-                                            + IsNeighborAlive(index, x, y, -1, 1)
-                                            + IsNeighborAlive(index, x, y, 0, 1)
-                                            + IsNeighborAlive(index, x, y, 1, 1)
-                                            + IsNeighborAlive(index, x, y, 1, 0)
-                                            + IsNeighborAlive(index, x, y, 1, -1)
-                                            + IsNeighborAlive(index, x, y, 0, -1)
-                                            + IsNeighborAlive(index, x, y, -1, -1);
+                    var aliveNeighbor = IsNeighborAlive(index, x-1, y)
+                                            + IsNeighborAlive(index, x-1, y+1)
+                                            + IsNeighborAlive(index, x, y+1)
+                                            + IsNeighborAlive(index, x+1, y+1)
+                                            + IsNeighborAlive(index, x+1, y)
+                                            + IsNeighborAlive(index, x+1, y-1)
+                                            + IsNeighborAlive(index, x, y-1)
+                                            + IsNeighborAlive(index, x-1, y-1);
 
                     var isAlive = world[x, y];
 
@@ -92,6 +92,7 @@ namespace ConwayBlazor.Models
 
 
                     nextGeneration[x, y] = survives;
+                    this.Population += survives ? 1 : 0;
                 };
             };
 
@@ -108,6 +109,7 @@ namespace ConwayBlazor.Models
         }
 
         public int Generation { get; private set; }
+        public int Population { get; private set; }
 
         public event Action OnChange;
         private void NotifyStateChanged() => OnChange?.Invoke();
