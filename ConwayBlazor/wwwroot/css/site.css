@@ -21,6 +21,9 @@ body, html {
     margin: auto; 
     border: 1px solid;
 }
+.cell:hover {
+     background: yellow;
+}
 
     .cell.alive {
         background: green;

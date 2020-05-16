@@ -8,7 +8,7 @@ namespace ConwayBlazor.Models
         private readonly int _sizeX;
         private readonly int _sizeY;
         private readonly bool[][,] _cells;
-
+        private int _refreshDelay;
 
         public World(int sizeX, int sizeY)
         {
@@ -24,6 +24,7 @@ namespace ConwayBlazor.Models
             };
 
             Reset();
+            SetRefreshFrequency(10);
         }
 
         public void Reset()
@@ -50,9 +51,14 @@ namespace ConwayBlazor.Models
                 {
                     Step();
                     NotifyStateChanged();
-                    await Task.Delay(100);
+                    await Task.Delay(_refreshDelay);
                 }
             });
+        }
+
+        public void SetRefreshFrequency(int frequency)
+        {
+            _refreshDelay = (int)(1000 * (1f / frequency));
         }
 
         private int IsNeighborAlive(int gridIndex, int proposedOffsetX, int proposedOffsetY)

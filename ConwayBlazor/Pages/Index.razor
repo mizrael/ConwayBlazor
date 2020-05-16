@@ -10,8 +10,10 @@
         {
             <div class="row">
                 @for (var x= 0; x != this.World.Cells.GetLength(0); ++x)
-                {
-                    <div class="cell @(this.World.Cells[x, y] ? "alive" : "")">&nbsp;</div>
+                {   
+                    var x1 = x; var y1 = y;
+                    
+                    <div @onclick="(e => SetCellAlive(x1,y1))" class="cell @(this.World.Cells[x, y] ? "alive" : "")">&nbsp;</div>
                 }
             </div>
         }
@@ -30,6 +32,11 @@
     private void Reset(MouseEventArgs e)
     {
         this.World.Reset();
+    }
+
+    private void SetCellAlive(int x, int y)
+    {
+        this.World.Cells[x, y] = true;
     }
 
     private void Refresh()
