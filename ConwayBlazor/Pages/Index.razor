@@ -1,0 +1,44 @@
+﻿@page "/"
+
+@if (null != this.World)
+{
+    <h3>Generation: @this.World.Generation</h3>
+    <button @onclick="Reset">Reset</button>
+
+    <div id="container">
+        @for (var y = 0; y != this.World.Cells.GetLength(1); ++y)
+        {
+            <div class="row">
+                @for (var x= 0; x != this.World.Cells.GetLength(0); ++x)
+                {
+                    <div class="cell @(this.World.Cells[x, y] ? "alive" : "")">&nbsp;</div>
+                }
+            </div>
+        }
+    </div>
+}
+@code
+{
+    [Inject]
+    public World World { get; set; }
+
+    protected override void OnInitialized()
+    {
+        World.OnChange += Refresh;
+    }
+
+    private void Reset(MouseEventArgs e)
+    {
+        this.World.Reset();
+    }
+
+    private void Refresh()
+    {
+        InvokeAsync(() => StateHasChanged());
+    }
+
+    public void Dispose()
+    {
+        World.OnChange -= Refresh;
+    }
+}
