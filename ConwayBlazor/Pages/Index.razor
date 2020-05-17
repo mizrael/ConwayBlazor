@@ -2,8 +2,13 @@
 
 @if (null != this.World)
 {
-    <p>Generation: @this.World.Generation, Population: @this.World.Population</p>
-    <button @onclick="Reset">Reset</button>
+    <div id="controls">
+        <p>
+            <button @onclick="TogglePause">@(this.World.Paused ? "Play" : "Pause")</button>
+            <button @onclick="Reset">Reset</button>
+        </p>
+        <p>Generation: @this.World.Generation, Population: @this.World.Population</p>
+    </div>
 
     <div id="container">
         @for (var y = 0; y != this.World.Cells.GetLength(1); ++y)
@@ -13,7 +18,8 @@
                 {   
                     var x1 = x; var y1 = y;
                     
-                    <div @onclick="(e => SetCellAlive(x1,y1))" class="cell @(this.World.Cells[x, y] ? "alive" : "")">&nbsp;</div>
+                    <div @onclick="(e => SetCellAlive(x1,y1))" 
+                        class="cell @(this.World.Cells[x, y] ? "alive" : "")">&nbsp;</div>
                 }
             </div>
         }
@@ -34,9 +40,15 @@
         this.World.Reset();
     }
 
+    private void TogglePause(MouseEventArgs e)
+    {
+        this.World.TogglePause();
+    }
+
     private void SetCellAlive(int x, int y)
     {
-        this.World.Cells[x, y] = true;
+        if(this.World.Paused)
+            this.World.Cells[x, y] = true;
     }
 
     private void Refresh()

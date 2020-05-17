@@ -7,8 +7,20 @@ body, html {
     height: 100%;
 }
 
+#controls{
+    position: fixed;
+    background: rgba(0, 51, 93, 0.62);
+    border: 2px solid #666;
+    border-radius: 6px;
+    bottom: 0;
+    right: 0;
+    height: 40px;
+    padding: 10px 5px;
+    color: #fff;
+}
+
 #container {
-    height: 100%
+    height: 100%;
 }
 
 .row {

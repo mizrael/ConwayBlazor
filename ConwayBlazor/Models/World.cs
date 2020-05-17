@@ -9,7 +9,7 @@ namespace ConwayBlazor.Models
         private readonly int _sizeY;
         private readonly bool[][,] _cells;
         private int _refreshDelay;
-
+        
         public World(int sizeX, int sizeY)
         {
             _sizeX = sizeX;
@@ -49,11 +49,17 @@ namespace ConwayBlazor.Models
             {
                 while (true)
                 {
-                    Step();
-                    NotifyStateChanged();
+                    if(!Paused){
+                        Step();
+                        NotifyStateChanged();
+                    }
                     await Task.Delay(_refreshDelay);
                 }
             });
+        }
+
+        public void TogglePause(){
+            Paused = !Paused;
         }
 
         public void SetRefreshFrequency(int frequency)
@@ -116,7 +122,7 @@ namespace ConwayBlazor.Models
 
         public int Generation { get; private set; }
         public int Population { get; private set; }
-
+        public bool Paused {get; private set;}
         public event Action OnChange;
         private void NotifyStateChanged() => OnChange?.Invoke();
     }
