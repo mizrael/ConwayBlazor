@@ -19,7 +19,7 @@
                     var x1 = x; var y1 = y;
                     
                     <div @onclick="(e => SetCellAlive(x1,y1))" 
-                        class="cell @(this.World.Cells[x, y] ? "alive" : "")">&nbsp;</div>
+                        class="cell @(this.World.Paused ? "selectable" : "") @(this.World.Cells[x, y] ? "alive" : "")">&nbsp;</div>
                 }
             </div>
         }
