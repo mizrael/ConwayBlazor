@@ -29,7 +29,7 @@ namespace ConwayBlazor
             services.AddRazorPages();
             services.AddServerSideBlazor();
 
-            services.AddSingleton<World>((ctx) =>
+            services.AddScoped<World>((ctx) =>
             {
                 var world = new World(40, 80);
                 world.Start();
