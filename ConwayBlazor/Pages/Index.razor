@@ -32,7 +32,7 @@
 
     protected override void OnInitialized()
     {
-        World.OnChange += Refresh;
+        World.OnChangeAsync += Refresh;
     }
 
     private void Reset(MouseEventArgs e)
@@ -51,13 +51,13 @@
             this.World.Cells[x, y] = true;
     }
 
-    private void Refresh()
+    private async Task Refresh()
     {
-        InvokeAsync(() => StateHasChanged());
+        await InvokeAsync(() => StateHasChanged());
     }
 
     public void Dispose()
     {
-        World.OnChange -= Refresh;
+        World.OnChangeAsync -= Refresh;
     }
 }

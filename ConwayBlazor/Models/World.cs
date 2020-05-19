@@ -123,7 +123,7 @@ namespace ConwayBlazor.Models
         public int Generation { get; private set; }
         public int Population { get; private set; }
         public bool Paused {get; private set;}
-        public event Action OnChange;
-        private void NotifyStateChanged() => OnChange?.Invoke();
+        public event Func<Task> OnChangeAsync;
+        private void NotifyStateChanged() => OnChangeAsync?.Invoke();
     }
 }
