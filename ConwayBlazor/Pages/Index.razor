@@ -53,7 +53,7 @@
 
     private async Task Refresh()
     {
-        await InvokeAsync(() => StateHasChanged());
+        await InvokeAsync(StateHasChanged);
     }
 
     public void Dispose()
